@@ -1,0 +1,7 @@
+node_modules
+pnpm-lock.yaml
+package-lock.json
+token.json
+current_livestream.json
+config/*.js
+!config/*.sample.js

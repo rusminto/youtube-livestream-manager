@@ -1,0 +1,24 @@
+{
+  "name": "youtube-livestream-manager",
+  "version": "1.0.0",
+  "description": "An autonomous Node.js service for managing 24/7 YouTube livestreams, with OBS and Discord integration.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "youtube",
+    "livestream",
+    "obs",
+    "discord",
+    "automation",
+    "node.js"
+  ],
+  "author": "rusminto <rusminto900@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "^129.0.0",
+    "obs-websocket-js": "^5.0.3",
+    "axios": "^1.6.2"
+  }
+}
