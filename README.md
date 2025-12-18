@@ -52,18 +52,16 @@ Before you begin, ensure you have the following:
     -   (Optional) Edit `config/settings.config.js` to customize the stream title, description, Discord message, etc.
 
 4.  **First-Time Authentication (to get `token.json`):**
-    -   This application uses OAuth 2.0. You must authorize it once to generate a `token.json` file that stores the authentication token.
-    -   Run the script for the first time: `node index.js`.
+    -   This application uses OAuth 2.0. You must authorize it once to generate a `token.json` file that stores the authentication credentials.
+    -   Run the script for the first time from your terminal:
+        ```bash
+        node index.js
+        ```
     -   The script will detect that no token exists and will print an authorization URL to the console.
     -   Copy this URL, paste it into your browser, and complete the Google login and consent flow.
-    -   After authorizing, your browser will be redirected to the `redirectUrl` you configured. The URL in your browser's address bar will contain a `code` parameter (e.g., `http://localhost:3000/auth/google?code=4/0A...`).
-    -   The script needs this code to get the token. You will need to temporarily edit `index.js` to provide it. Open `index.js` and find the `main` function. Add the following line at the beginning of the function:
-        ```javascript
-        // Add this line, run the script once, then remove it
-        await google.setToken({ code: 'PASTE_THE_CODE_FROM_THE_URL_HERE' });
-        ```
-    -   Run `node index.js` one more time. The script will use the code to fetch the token and save it as `token.json`.
-    -   **Once `token.json` is successfully created, remove the `await google.setToken(...)` line you added.**
+    -   After authorizing, your browser will be redirected to the `redirectUrl` you configured (e.g., `http://localhost:3000/auth/google`). The URL in your browser's address bar will contain a `code` parameter. It will look something like this: `?code=4/0A...&scope=...`
+    -   The script will now be waiting for input in your terminal. Copy the **entire code value** from the URL (make sure to get the full value, it can be long) and paste it into the terminal, then press Enter.
+    -   The script will use this code to fetch the token, save it as `token.json`, and then continue running. You only need to do this once.
 
 ## How to Use
 Once setup is complete, simply run the service from your terminal:

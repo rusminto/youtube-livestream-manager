@@ -4,7 +4,9 @@ module.exports = {
         description: 'This stream is managed by an automated script.',
         privacyStatus: 'unlisted',
         resolution: '720p',
-        frameRate: '30fps'
+        frameRate: '30fps',
+        maxLifespanHours: 11.5,
+        checkIntervalMs: 60000
     },
     discord: {
         botName: 'YouTube Stream Bot',

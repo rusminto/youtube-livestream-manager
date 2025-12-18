@@ -10,8 +10,6 @@ const google = new Google(credentials.google);
 const obs = new OBS(credentials.obs);
 const discord = new Discord(credentials.discord);
 const MANAGED_STREAM_PATH = path.join(__dirname, 'current_livestream.json');
-const CHECK_INTERVAL_MS = 60 * 1000; // Check every minute
-const MAX_LIFESPAN_HOURS = 11.5;
 
 function readManagedStream() {
     if (fs.existsSync(MANAGED_STREAM_PATH)) {
@@ -104,9 +102,9 @@ async function manageLivestream() {
     const now = new Date();
     const durationHours = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
 
-    console.log(`Current stream is ${durationHours.toFixed(2)} hours old. (Max: ${MAX_LIFESPAN_HOURS})`);
+    console.log(`Current stream is ${durationHours.toFixed(2)} hours old. (Max: ${settings.youtube.maxLifespanHours})`);
 
-    if (durationHours > MAX_LIFESPAN_HOURS) {
+    if (durationHours > settings.youtube.maxLifespanHours) {
         console.log('Stream has exceeded its maximum lifespan. Rotating...');
         try {
             await google.endLivestream(managedStream.broadcastId);
@@ -124,13 +122,25 @@ async function main() {
     if (!google.isAuthenticated()) {
         console.log('Application is not authenticated.');
         console.log(`Please visit this URL to authenticate: ${google.loginUrl}`);
-        console.log('After authenticating, you will be redirected. Copy the \'code\' from the URL and provide it here.');
         
-        // This part requires manual intervention since we have no web server.
-        // The user would need to paste the code, or we'd need a web server just for auth.
-        // For now, we assume the token.json exists or will be created manually.
-        console.log('Please ensure token.json is present before running the service.');
-        return; // Stop if not authenticated.
+        const readline = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        const code = await new Promise(resolve => {
+            readline.question('After authenticating, you will be redirected. Copy the \'code\' from the URL and provide it here: ', resolve);
+        });
+
+        readline.close();
+
+        try {
+            await google.setToken({ code: code.trim() });
+            console.log('Authentication successful! Token saved.');
+        } catch (error) {
+            console.error('Failed to get token. Please try again.', error.message);
+            return;
+        }
     }
     
     console.log('Application authenticated successfully. Starting livestream manager.');
@@ -139,7 +149,7 @@ async function main() {
     await manageLivestream();
 
     // Then, run it on a loop
-    setInterval(manageLivestream, CHECK_INTERVAL_MS);
+    setInterval(manageLivestream, settings.youtube.checkIntervalMs);
 }
 
 main().catch(console.error);
