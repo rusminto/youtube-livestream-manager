@@ -2,7 +2,9 @@
 
 This is an automated Node.js service that manages a 24/7 YouTube livestream. It is designed to run continuously, automatically rotating the stream after a configured duration to prevent it from getting too long. It also integrates with OBS and Discord for a fully automated workflow.
 
-This service was written by the [Gemini CLI](https://developers.google.com/gemini/cli).
+This service was written by the [Gemini CLI](https://developers.google.com/gemini/cli).  
+
+Proof that it is works : https://youtu.be/OegbegISPE0?si=t1QD1ZQtFSfU73Wf  
 
 ## Main Functionality
 - **Autonomous Operation:** Runs as a background script that you can "set and forget".
