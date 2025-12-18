@@ -4,7 +4,7 @@ This is an automated Node.js service that manages a 24/7 YouTube livestream. It 
 
 This service was written by the [Gemini CLI](https://developers.google.com/gemini/cli).  
 
-Proof that it is works : https://youtu.be/OegbegISPE0?si=t1QD1ZQtFSfU73Wf  
+Proof that it is works : https://youtu.be/noWdeCu_DsM  
 
 ## Main Functionality
 - **Autonomous Operation:** Runs as a background script that you can "set and forget".
