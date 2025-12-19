@@ -178,7 +178,10 @@ class _google {
                 contentDetails: {
                     enableAutoStart: true,
                     enableAutoStop: true,
+                    selfDeclaredMadeForKids: settings.selfDeclaredMadeForKids,
+                    latencyPreference: settings.latencyPreference
                 }
+
             }
         });
 
@@ -191,6 +194,25 @@ class _google {
             id: broadcastId,
             streamId: streamData.id
         });
+
+        if (settings.ageRestriction) {
+            try {
+                console.log(`Attempting to set age restriction for video ${broadcastId}...`);
+                await this.youtube.videos.update({
+                    part: 'status',
+                    requestBody: {
+                        id: broadcastId,
+                        status: {
+                            selfDeclaredMadeForKids: false,
+                            ageGated: true
+                        }
+                    }
+                });
+                console.log('Successfully set age restriction.');
+            } catch (error) {
+                console.error('Could not set age restriction.', error.message);
+            }
+        }
 
         return { broadcast: broadcastRes.data, stream: streamData };
     }

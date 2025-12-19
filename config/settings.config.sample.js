@@ -6,7 +6,11 @@ module.exports = {
         resolution: '720p',
         frameRate: '30fps',
         maxLifespanHours: 11.5,
-        checkIntervalMs: 60000
+        checkIntervalMs: 60000,
+        selfDeclaredMadeForKids: false,
+        latencyPreference: 'low',
+        ageRestriction: true
+
     },
     discord: {
         botName: 'YouTube Stream Bot',
