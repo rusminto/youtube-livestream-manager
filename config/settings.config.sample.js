@@ -9,8 +9,8 @@ module.exports = {
         checkIntervalMs: 60000,
         selfDeclaredMadeForKids: false,
         latencyPreference: 'low',
-        ageRestriction: true
-
+        ageRestriction: true,
+        autoStop: false,
     },
     discord: {
         botName: 'YouTube Stream Bot',

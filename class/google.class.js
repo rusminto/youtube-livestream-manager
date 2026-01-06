@@ -10,9 +10,9 @@ class _google {
 
     constructor(config){
         this.oauth2Client = new google.auth.OAuth2(
-            config.web.client_id,		// YOUR_CLIENT_ID
-            config.web.client_secret,	// YOUR_CLIENT_SECRET
-            config.redirectUrl		// YOUR_REDIRECT_URL
+            config.web.client_id,        // YOUR_CLIENT_ID
+            config.web.client_secret,    // YOUR_CLIENT_SECRET
+            config.redirectUrl        // YOUR_REDIRECT_URL
         );
 
         this.loadToken();
@@ -26,7 +26,7 @@ class _google {
         this.loginUrl = this.oauth2Client.generateAuthUrl({
             // 'online' (default) or 'offline' (gets refresh_token)
             access_type: 'offline',
-          
+
             // If you only need one scope you can pass it as a string
             scope: scopes
         });
@@ -59,12 +59,12 @@ class _google {
     }
 
 
-	getProfile(){
+    getProfile(){
         const oauth2 = google.oauth2({
             auth: this.oauth2Client,
             version: 'v2'
         });
-    
+
         return new Promise((resolve) => {
             oauth2.userinfo.get( (err, res) => {
                 if (err) {
@@ -102,7 +102,7 @@ class _google {
                 broadcastStatus: 'complete'
             });
             return res.data;
-        } 
+        }
         // If the stream was created but never went live, delete it
         else if (status === 'created' || status === 'ready') {
             console.log(`Deleting broadcast ${broadcastId} because it never went live.`);
@@ -124,20 +124,20 @@ class _google {
             part: 'id,snippet',
             mine: true
         });
-    
+
         const existingStream = streamList.data.items.find(
             (stream) => stream.snippet.title === settings.title
         );
-    
+
         if (existingStream) {
             console.log(`Found existing stream: ${existingStream.id}`);
-            
-			const streamRes = await this.youtube.liveStreams.list({
-				part: 'snippet,cdn,status',
-				id: existingStream.id
-			});
 
-			return streamRes.data.items[0];
+            const streamRes = await this.youtube.liveStreams.list({
+                part: 'snippet,cdn,status',
+                id: existingStream.id
+            });
+
+            return streamRes.data.items[0];
         } else {
             // Create a new stream if one doesn't exist
             const streamRes = await this.youtube.liveStreams.insert({
@@ -151,12 +151,12 @@ class _google {
                         ingestionType: 'rtmp',
                         resolution: settings.resolution
                     },
-					status: {
-						streamStatus: 'active'
-					}
+                    status: {
+                        streamStatus: 'active'
+                    }
                 }
             });
-    
+
             console.log(`Created new stream: ${streamRes.data.id}`);
             return streamRes.data;
         }
@@ -177,7 +177,10 @@ class _google {
                 },
                 contentDetails: {
                     enableAutoStart: true,
-                    enableAutoStop: true,
+
+                    // set autoStop to *true*, if it's really desired
+                    enableAutoStop: settings.autoStop === true,
+
                     selfDeclaredMadeForKids: settings.selfDeclaredMadeForKids,
                     latencyPreference: settings.latencyPreference
                 }
@@ -224,9 +227,9 @@ class _google {
                 part: 'status',
                 id: broadcastId,
             });
-            
+
             const broadcast = res.data.items[0];
-            
+
             if (broadcast) {
                 console.log(`Current broadcast status: ${broadcast.status.lifeCycleStatus}. Expected: ${expectedStatus}`);
                 return broadcast.status.lifeCycleStatus === expectedStatus;
@@ -256,7 +259,7 @@ class _google {
                         part: 'status',
                         id: broadcastId,
                     });
-                    
+
                     const broadcast = res.data.items[0];
 
                     if (broadcast && broadcast.status.lifeCycleStatus === 'ready') {
