@@ -10,7 +10,7 @@ module.exports = {
         selfDeclaredMadeForKids: false,
         latencyPreference: 'low',
         ageRestriction: true
-
+        autoStop: false
     },
     discord: {
         botName: 'YouTube Stream Bot',
